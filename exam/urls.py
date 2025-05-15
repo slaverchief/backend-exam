@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("main/", include("main.urls")),
     path("authsys/", include("authsys.urls")),
+    path("sets/", include("booksets.urls"))
 
 ]
 

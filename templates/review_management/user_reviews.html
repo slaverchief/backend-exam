@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Мои рецензии{% endblock %}
+{% block header_loading %}
+<link rel="stylesheet" href="{% static 'css/review_management/userpage.css' %}">
+{% endblock %}
+{% block content %}
+<div class="user-reviews-container">
+    <div class="page-header">
+        <h1><i class="fas fa-comments"></i> Мои рецензии</h1>
+        <p>Здесь отображаются все ваши рецензии на книги</p>
+    </div>
+
+    <div class="reviews-list">
+        {% for review in reviews %}
+        <div class="review-card status-{{ review.get_status_display|slugify }}">
+            <div class="review-header">
+                <div class="book-info">
+                    <a href="{% url 'detail' review.book.pk %}" class="book-title">
+                        <i class="fas fa-book"></i> {{ review.book.name }}
+                    </a>
+                    <div class="book-meta">
+                        <span><i class="fas fa-user-edit"></i> {{ review.book.author }}</span>
+                        <span><i class="fas fa-calendar-alt"></i> {{ review.book.year }}</span>
+                    </div>
+                </div>
+                
+                <div class="review-status status-badge">
+                    <span class="status-text">{{ review.get_status_display }}</span>
+                    <i class="status-icon fas 
+                        {% if review.status == 3 %}fa-check-circle 
+                        {% elif review.status == 2 %}fa-times-circle 
+                        {% else %}fa-clock{% endif %}"></i>
+                </div>
+            </div>
+
+            <div class="review-content">
+                <div class="review-rating">
+                    {% for i in "12345" %}
+                    <i class="fas fa-star{% if forloop.counter > review.rate %}-empty{% endif %}"></i>
+                    {% endfor %}
+                    <span class="rating-value">{{ review.rate }}/5</span>
+                </div>
+                
+                <div class="review-text">
+                    <p>{{ review.text }}</p>
+                </div>
+                
+                <div class="review-footer">
+                    <span class="review-date">
+                        <i class="far fa-clock"></i> {{ review.date|date:"d.m.Y H:i" }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-reviews">
+            <i class="fas fa-comment-slash"></i>
+            <p>У вас пока нет рецензий</p>
+        </div>
+        {% endfor %}
+        {% if page_obj.has_other_pages %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; первая</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+                {% endif %}
+                
+                <span class="current">
+                    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                </span>
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">следующая</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

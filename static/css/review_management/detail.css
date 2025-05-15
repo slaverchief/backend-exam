@@ -1,0 +1,54 @@
+.review-moderation-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.review-details {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.review-text {
+    margin-top: 15px;
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+
+.moderation-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-approve, .btn-reject {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.btn-approve {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-approve:hover {
+    background-color: #45a049;
+}
+
+.btn-reject {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-reject:hover {
+    background-color: #d32f2f;
+}

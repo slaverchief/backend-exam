@@ -1,6 +1,7 @@
 import hashlib
 import os
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from django.db import models
 
@@ -27,6 +28,8 @@ class Book(models.Model):
     def count_reviews(self):
         amount = common = 0
         for review in self.reviews.all():
+            if review.status != 3:
+                continue
             amount+=1
             common += review.rate
         if amount == 0:
@@ -66,12 +69,24 @@ class BookCover(models.Model):
     def __str__(self):
         return f"Обложка для {self.book.name}"
 
+STATUS_CHOICES = {
+    "на рассмотрении": 1,
+    "отклонено": 2,
+    "одобрено": 3
+}
+
+STATUSES = ["на рассмотрении", "отклонено", "одобрено"]
+
 class Review(models.Model):
     book = models.ForeignKey("Book", on_delete=models.CASCADE, related_name="reviews")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rate = models.IntegerField()
     text = models.TextField()
+    status = models.PositiveIntegerField(choices=STATUS_CHOICES, validators=[MinValueValidator(1),MaxValueValidator(3)], default=1)
     date = models.DateTimeField(auto_now=True)
+
+    def get_status_display(self):
+        return STATUSES[self.status-1]
 
     def get_rate_display(self):
         RATE_CHOICES = {

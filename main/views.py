@@ -32,7 +32,7 @@ class BookDetailView(DetailView):
         book = self.object
 
         # Получаем рецензии с пагинацией
-        reviews_list = Review.objects.filter(book=book).order_by('-date')
+        reviews_list = Review.objects.filter(book=book, status=3).order_by('-date')
         paginator = Paginator(reviews_list, 10)
         page = self.request.GET.get('page')
         reviews = paginator.get_page(page)
@@ -58,7 +58,7 @@ class AddReviewView(LoginRequiredMixin, CreateView):
         book = get_object_or_404(Book, pk=self.kwargs['pk'])
         form.instance.book = book
         form.instance.user = self.request.user
-        messages.success(self.request, 'Ваша рецензия добавлена!')
+        messages.info(self.request, 'Ваша рецензия отправлена на рассмотрение!')
         return super().form_valid(form)
 
     def get_success_url(self):

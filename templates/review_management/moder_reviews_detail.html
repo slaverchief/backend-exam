@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block header_loading %}
+<link rel="stylesheet" href="{% static 'css/review_management/detail.css' %}">
+{% endblock %}
+{% block title %}Модерация рецензии{%  endblock %}
+{% block content %}
+<div class="review-moderation-container">
+    <h1>Модерация рецензии</h1>
+    
+    <div class="review-details">
+        <h2>Книга: {{ review.book.title }}</h2>
+        <p>Автор рецензии: {{ review.user.username }}</p>
+        <p>Оценка: {{ review.rate }}/5</p>
+        <p>Дата: {{ review.date }}</p>
+        <p>Текущий статус: {{ review.get_status_display }}</p>
+        
+        <div class="review-text">
+            <h3>Текст рецензии:</h3>
+            <p>{{ review.text }}</p>
+        </div>
+    </div>
+    
+    <form method="post" class="moderation-actions">
+        {% csrf_token %}
+        <button type="submit" name="action" value="approve" class="btn-approve">Одобрить</button>
+        <button type="submit" name="action" value="reject" class="btn-reject">Отклонить</button>
+    </form>
+</div>
+{% endblock %}

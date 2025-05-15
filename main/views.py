@@ -23,6 +23,7 @@ class BookListView(ListView):
     ListView.paginate_by = 10
 
 
+
 class BookDetailView(DetailView):
     model = Book
     template_name = 'main/book_detail.html'
@@ -45,6 +46,7 @@ class BookDetailView(DetailView):
         context.update({
             'reviews': reviews,
             'user_review': user_review,
+            'user_booksets': self.request.user.booksets.all()
         })
         return context
 

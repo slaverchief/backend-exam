@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Мои подборки{% endblock %}
+{% block header_loading %}
+<link rel="stylesheet" href="{% static 'css/booksets/user_booksets.css' %}">
+{% endblock %}
+{% block content %}
+<div class="booksets-container">
+    <h1>Мои подборки</h1>
+    
+    {% if booksets %}
+    <table class="booksets-table">
+        <thead>
+            <tr>
+                <th>Название подборки</th>
+                <th>Количество книг</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bookset in booksets %}
+            <tr>
+                <td>{{ bookset.name }}</td>
+                <td>{{ bookset.book_count }}</td>
+                <td>
+                    <a href="{% url 'bookset_detail' bookset.pk %}" class="view-btn">Просмотр</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>У вас пока нет ни одной подборки.</p>
+    {% endif %}
+</div>
+{% endblock %}

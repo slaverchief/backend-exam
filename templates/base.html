@@ -27,10 +27,14 @@
         {% if request.user.is_superuser %}
         <a href="{% url 'create_book' %}" class="nav">Добавить книгу</a>
         {% endif %}
+        <div>
+            {% if request.user.is_authenticated and not request.user.is_staff %}
+            <a href="{% url 'user_booksets' %}" class="nav">Мои подборки</a>
+            <a class="nav" id="openModalBtn">Добавить подборку</a>
 
-        {% if request.user.is_authenticated and not request.user.is_staff %}
-        <button class="nav" id="openModalBtn">Добавить подборку</button>
-        {% endif %}
+            {% endif %}
+        </div>
+
     </nav>
 
     <!-- Модальное окно для создания подборки -->
@@ -51,7 +55,6 @@
             </form>
         </div>
     </div>
-
     {% if messages %}
     <div class="messages-container">
         {% for message in messages %}
@@ -108,30 +111,6 @@
             if (event.target === modal) {
                 modal.style.display = "none";
             }
-        });
-
-        // Обработка формы
-        document.getElementById("booksetForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = "{% url 'mainpage' %}";
-                } else {
-                    alert("Ошибка при создании подборки");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
         });
     </script>
 </body>

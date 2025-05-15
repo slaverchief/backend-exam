@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Подборка: {{ bookset.name }}{% endblock %}
+{% block header_loading %}
+<link rel="stylesheet" href="{% static 'css/booksets/bookset_detail.css' %}">
+{% endblock %}
+{% block content %}
+<div class="bookset-detail-container">
+    <div class="bookset-header">
+        <h1>{{ bookset.name }}</h1>
+        <p class="book-count">Книг в подборке: {{ books|length }}</p>
+    </div>
+
+    {% if books %}
+    <div class="books-grid">
+        {% for book in books %}
+        <div class="book-card">
+            <div class="book-cover">
+                {% if book.cover %}
+                <img src="{{ book.cover.url }}" alt="{{ book.title }}">
+                {% else %}
+                <div class="no-cover">Нет обложки</div>
+                {% endif %}
+            </div>
+            <div class="book-info">
+                <h3><a href="{% url 'detail' book.id %}">{{ book.name }}</a></h3>
+                <p class="book-author">{{ book.author }}</p>
+                <p class="book-year">{{ book.year }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-bookset">
+        <p>В этой подборке пока нет книг.</p>
+        <a href="{% url 'mainpage' %}" class="add-books-btn">Добавить книги</a>
+    </div>
+    {% endif %}
+
+    <div class="back-link">
+        <a href="{% url 'user_booksets' %}">← Вернуться к моим подборкам</a>
+    </div>
+</div>
+{% endblock %}

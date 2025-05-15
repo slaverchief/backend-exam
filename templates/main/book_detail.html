@@ -132,4 +132,86 @@
         {% endif %}
     </div>
 </div>
+{% if user.is_authenticated and not user.is_staff and not user.is_superuser %}
+<!-- Кнопка для открытия модального окна -->
+<button id="addToBooksetBtn" class="add-to-bookset-btn">
+    <i class="fas fa-folder-plus"></i> Добавить в подборку
+</button>
+
+<!-- Модальное окно для добавления в подборку -->
+<div id="addToBooksetModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Добавить в подборку</h2>
+        <form id="addToBooksetForm" method="post" action="{% url 'add_book_to_bookset' book.pk %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="bookset-select">Выберите подборку:</label>
+                <select name="bookset_id" id="bookset-select" required>
+                    <option value="">-- Выберите подборку --</option>
+                    {% for bookset in user_booksets %}
+                    <option value="{{ bookset.id }}">{{ bookset.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="cancel-btn">Отмена</button>
+                <button type="submit" class="submit-btn">Добавить</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Открытие/закрытие модального окна
+    const modal_add = document.getElementById("addToBooksetModal");
+    const btn = document.getElementById("addToBooksetBtn");
+    const closeBtn_add = document.querySelector("#addToBooksetModal .close");
+    const cancelBtn_add = document.querySelector("#addToBooksetModal .cancel-btn");
+
+    btn.onclick = function() {
+        modal_add.style.display = "block";
+    }
+
+    closeBtn_add.onclick = function() {
+        modal_add.style.display = "none";
+    }
+
+    cancelBtn_add.onclick = function() {
+        modal_add.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal_add) {
+            modal_add.style.display = "none";
+        }
+    }
+
+    // Обработка формы
+    document.getElementById("addToBooksetForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = "{% url 'detail' book.pk %}?added_to_bookset=true";
+            } else {
+                alert("Произошла ошибка при добавлении книги в подборку");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+{% endif %}
+
+
 {% endblock %}

@@ -24,10 +24,11 @@
             {% endif %}
         </div>
 
-        {% if request.user.is_superuser %}
-        <a href="{% url 'create_book' %}" class="nav">Добавить книгу</a>
-        {% endif %}
+
         <div>
+            {% if request.user.is_superuser %}
+            <a href="{% url 'create_book' %}" class="nav">Добавить книгу</a>
+            {% endif %}
             {% if request.user.is_authenticated and not request.user.is_staff %}
             <a href="{% url 'user_booksets' %}" class="nav">Мои подборки</a>
             <a class="nav" id="openModalBtn">Добавить подборку</a>

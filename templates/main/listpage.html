@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% block header_loading %}
+<link rel="stylesheet" href="{% static 'css/main/listpage.css' %}">
+{% endblock %}
+
+{% block title %}Список книг{% endblock %}
+
+
+{% block content %}
+<div class="books-container">
+    <div class="books-header">
+        <h1><i class="fas fa-book-open"></i> Список книг</h1>
+    </div>
+
+    <div class="books-list">
+        {% for book in books %}
+        <div class="book-card">
+            {% if book.cover %}
+            <div class="book-cover">
+                <img src="{{ book.cover.file.url }}" alt="{{ book.name }}">
+            </div>
+            {% else %}
+            <div class="book-cover no-cover">
+                <i class="fas fa-book"></i>
+            </div>
+            {% endif %}
+
+            <div class="book-info">
+                <h3 class="book-title">{{ book.name }}</h3>
+                {% if book.count_reviews %}
+                <h5 style="color: {{book.get_color_reviews}}">{{book.count_reviews}}🌟</h5>
+                {% else %}
+                <h5>Нет рецензий</h5>
+                {% endif %}
+                <div class="book-meta">
+                    <span><i class="fas fa-user-edit"></i>Автор: {{ book.author }}</span>
+                    <span><i class="fas fa-calendar-alt"></i>Год: {{ book.year }}</span>
+                    <span><i class="fas fa-building"></i>Издательство: {{ book.madeby }}</span>
+                </div>
+
+                <div class="book-genres">
+                    {% for genre in book.genres.all %}
+                    <span class="genre-tag">{{ genre.name }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="book-actions">
+                    <a href="{% url 'detail' book.pk %}" class="btn btn-action view" title="Просмотр">
+                        <i class="fas fa-eye">👁️</i>
+                    </a>
+
+                    {% if user.is_staff or user.is_superuser %}
+                    <a href="{% url 'update_book' book.pk %}" class="btn btn-action edit" title="Редактировать">
+                        <i class="fas fa-edit">✍</i>
+                    </a>
+                    {% endif %}
+
+                    {% if user.is_superuser %}
+                    <form action="{% url 'delete_book' book.pk %}" method="post" class="delete-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-action delete" title="Удалить"
+                                onclick="return confirm('Вы уверены, что хотите удалить эту книгу?')">
+                            <i class="fas fa-trash-alt">🗑</i>
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-books">
+            <i class="fas fa-book"></i>
+            <p>Книги не найдены</p>
+        </div>
+        {% endfor %}
+    </div>
+      <!-- Пагинация -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="pagination-link">&laquo; первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="pagination-link">предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="pagination-link">следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-link">последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+{% endblock %}

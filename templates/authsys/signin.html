@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% block header_loading %}
+<link rel="stylesheet" href="{% static 'css/authsys/signin.css' %}">
+{% endblock %}
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-header">
+        <h1><i class="fas fa-sign-in-alt"></i> Вход в систему</h1>
+    </div>
+    
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+        <div class="auth-alert error">
+            <i class="fas fa-exclamation-circle"></i>
+            <div class="alert-content">
+                <h4>Ошибка авторизации!</h4>
+                <p>Неверное имя пользователя или пароль</p>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="form-group">
+            <label for="id_username"><i class="fas fa-user"></i> Логин</label>
+            <div class="input-with-icon">
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" name="username" id="id_username" required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="id_password"><i class="fas fa-lock"></i> Пароль</label>
+            <div class="input-with-icon">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" name="password" id="id_password" required>
+            </div>
+        </div>
+        
+        <div class="form-options">
+            <label class="remember-me">
+                <input type="checkbox" name="remember_me"> Запомнить меня
+            </label>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i> Войти
+            </button>
+        </div>
+        
+        <div class="auth-footer">
+            Нет аккаунта? <a href="{% url 'create_user' %}">Зарегистрируйтесь</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

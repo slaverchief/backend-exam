@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+{% block header_loading %}
+<link rel="stylesheet" href="{% static 'css/authsys/create_user.css' %}">
+{% endblock %}
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="admin-form-container">
+    <div class="admin-form-header">
+        <h1><i class="fas fa-user-plus"></i> Создание пользователя</h1>
+    </div>
+
+    <form method="post" class="admin-form">
+        {% csrf_token %}
+
+        {% if form.errors %}
+        <div class="form-alert error">
+            {{form.errors}}
+        </div>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+        <div class="form-alert error">
+            <i class="fas fa-exclamation-circle"></i>
+            <div class="alert-content">
+                <h4>Ошибка!</h4>
+                <p>Пожалуйста, исправьте ошибки в форме</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="form-section">
+            <h2 class="section-title"><i class="fas fa-id-card"></i> Основная информация</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id_username"><i class="fas fa-user"></i> Логин*</label>
+                    {{ form.username }}
+                    {% for error in form.username.errors %}
+                    <div class="error-message"><i class="fas fa-times-circle"></i> {{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_role"><i class="fas fa-user-tag"></i> Роль*</label>
+                    <div class="select-with-icon">
+                        <i class="fas fa-user-tag select-icon"></i>
+                        {{ form.role }}
+                    </div>
+                    <div class="role-description">
+                        <div class="role-desc user-desc">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Обычный пользователь (без специальных прав)</span>
+                        </div>
+                        <div class="role-desc staff-desc">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Модератор (доступ в админку)</span>
+                        </div>
+                        <div class="role-desc admin-desc">
+                            <i class="fas fa-crown"></i>
+                            <span>Администратор (полные права)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id_first_name"><i class="fas fa-signature"></i> Имя*</label>
+                    {{ form.first_name }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_last_name"><i class="fas fa-signature"></i> Фамилия*</label>
+                    {{ form.last_name }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2 class="section-title"><i class="fas fa-lock"></i> Безопасность</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id_password1"><i class="fas fa-key"></i> Пароль*</label>
+                    {{ form.password1 }}
+                    <div class="password-hint">
+                        <i class="fas fa-info-circle"></i> Минимум 8 символов, включая цифры и буквы
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password2"><i class="fas fa-key"></i> Подтверждение*</label>
+                    {{ form.password2 }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Сохранить
+            </button>
+
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const roleSelect = document.getElementById('id_role');
+    const descElements = document.querySelectorAll('.role-desc');
+
+    function updateRoleDescription() {
+        const value = roleSelect.value;
+        descElements.forEach(el => el.style.display = 'none');
+
+        if (value === 'user') {
+            document.querySelector('.user-desc').style.display = 'flex';
+        } else if (value === 'staff') {
+            document.querySelector('.staff-desc').style.display = 'flex';
+        } else if (value === 'admin') {
+            document.querySelector('.admin-desc').style.display = 'flex';
+        }
+    }
+
+    roleSelect.addEventListener('change', updateRoleDescription);
+    updateRoleDescription();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ book.name }}{% endblock %}
+{% block header_loading %}
+<link rel="stylesheet" href="{% static 'css/main/detail.css' %}">
+{% endblock %}
+{% block content %}
+<div class="book-detail-container">
+    <div class="book-main">
+        <div class="book-cover">
+            {% if book.cover %}
+            <img src="{{ book.cover.file.url }}" alt="{{ book.name }}">
+            {% else %}
+            <div class="no-cover">
+                <i class="fas fa-book"></i>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="book-info">
+            <h1 class="book-title">{{ book.name }}</h1>
+            
+            <div class="book-meta">
+                <div class="meta-item">
+                    <i class="fas fa-user-edit"></i>
+                    <span>Автор: {{ book.author }}</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Год издания: {{ book.year }}</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-building"></i>
+                    <span>Издательство: {{ book.madeby }}</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-copy"></i>
+                    <span>Количество страниц: {{ book.amount }}</span>
+                </div>
+            </div>
+            
+            <div class="book-genres">
+                {% for genre in book.genres.all %}
+                <span class="genre-tag">{{ genre.name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="book-description">
+        <h2><i class="fas fa-align-left"></i> Описание</h2>
+        <p>{{ book.desc }}</p>
+    </div>
+    
+    <div class="book-reviews">
+        <h2><i class="fas fa-comments"></i> Рецензии</h2>
+        
+        {% if user.is_authenticated and not user_review %}
+        <div class="add-review-form">
+            <form method="post" action="{% url 'add_review' book.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_rate">Ваша оценка:</label>
+                    <select name="rate" id="id_rate" class="form-control">
+                        <option value="5">Отлично (5)</option>
+                        <option value="4">Хорошо (4)</option>
+                        <option value="3">Удовлетворительно (3)</option>
+                        <option value="2">Плохо (2)</option>
+                        <option value="1">Ужасно (1)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="id_text">Текст рецензии:</label>
+                    <textarea name="text" id="id_text" rows="5" class="form-control"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Отправить
+                </button>
+            </form>
+        </div>
+        {% endif %}
+        
+        <div class="reviews-list">
+            {% for review in reviews %}
+            <div class="review-item">
+                <div class="review-header">
+                    <div class="review-user">
+                        <i class="fas fa-user-circle"></i>
+                        <span>{{ review.user.username }}</span>
+                    </div>
+                    <div class="review-rating">
+                        {% for i in "12345" %}
+                        <i class="fas fa-star{% if forloop.counter > review.rate %}-empty{% endif %}"></i>
+                        {% endfor %}
+                        <span style="color: {{review.get_rate_color}};">{{ review.get_rate_display }}</span>
+                    </div>
+                    <div class="review-date">
+                        <i class="far fa-clock"></i>
+                        <span>{{ review.date|date:"d.m.Y H:i" }}</span>
+                    </div>
+                </div>
+                <div class="review-text">
+                    <p>{{ review.text }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-reviews">
+                <i class="fas fa-comment-slash"></i>
+                <p>Пока нет рецензий. Будьте первым!</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if reviews.has_other_pages %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if reviews.has_previous %}
+                    <a href="?page=1">&laquo; первая</a>
+                    <a href="?page={{ reviews.previous_page_number }}">предыдущая</a>
+                {% endif %}
+                
+                <span class="current">
+                    Страница {{ reviews.number }} из {{ reviews.paginator.num_pages }}
+                </span>
+                
+                {% if reviews.has_next %}
+                    <a href="?page={{ reviews.next_page_number }}">следующая</a>
+                    <a href="?page={{ reviews.paginator.num_pages }}">последняя &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

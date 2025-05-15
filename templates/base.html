@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block header_loading %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="user-auth">
+            <a href="{% url 'mainpage' %}" class="nav">Главная</a>
+            {% if request.user.is_authenticated %}
+            <span class="user-name">{{ request.full_name }}</span>
+            <a href="{% url 'logout' %}" class="login-btn">Выйти</a>
+            {% else %}
+            <a href="{% url 'signin' %}" class="login-btn">Войти</a>
+            <a href="{% url 'create_user' %}" class="login-btn">Зарегистрироваться</a>
+            {% endif %}
+        </div>
+
+        {% if request.user.is_superuser %}
+        <a href="{% url 'create_book' %}" class="nav">Добавить книгу</a>
+        {% endif %}
+
+    </nav>
+    {% if messages %}
+    <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <span class="alert-message">{{ message }}</span>
+                <button class="alert-close">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="author-info">
+            Группа: 231-351 | Студент: ИМЯ ФАМИЛИЯ
+        </div>
+    </footer>
+ <script>
+        document.querySelectorAll('.alert-close').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.target.closest('.alert').remove();
+            });
+        });
+    </script>
+</body>
+</html>

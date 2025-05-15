@@ -1,0 +1,178 @@
+/* Общие стили */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+a{
+    text-decoration: none;
+}
+
+/* Навигационная панель */
+.navbar {
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #4CAF50;
+}
+
+/* Блок авторизации */
+.user-auth {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.login-btn, .logout-btn, .nav {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-btn:hover, .logout-btn:hover {
+    background-color: #45a049;
+}
+
+/* Основное содержимое */
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+/* Подвал */
+.footer {
+    background-color: #f1f1f1;
+    padding: 10px;
+    text-align: center;
+    margin-top: auto;
+}
+
+.author-info {
+    font-size: 0.9em;
+    color: #666;
+}
+/* Стили для сообщений */
+.messages-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.alert {
+    padding: 15px 20px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.3s ease-out;
+    transform: translateX(0);
+    transition: all 0.3s ease;
+}
+
+.alert:hover {
+    transform: translateX(-5px);
+}
+
+.alert-message {
+    flex-grow: 1;
+}
+
+.alert-close {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    margin-left: 15px;
+    color: inherit;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.alert-close:hover {
+    opacity: 1;
+}
+
+/* Цвета для разных типов сообщений */
+.alert-debug {
+    background-color: #f5f5f5;
+    color: #333;
+    border-left: 4px solid #777;
+}
+
+.alert-info {
+    background-color: #e7f5ff;
+    color: #0369a1;
+    border-left: 4px solid #3b82f6;
+}
+
+.alert-success {
+    background-color: #ebfbee;
+    color: #2b8a3e;
+    border-left: 4px solid #40c057;
+}
+
+.alert-warning {
+    background-color: #fff9db;
+    color: #e67700;
+    border-left: 4px solid #ffd43b;
+}
+
+.alert-error {
+    background-color: #fff5f5;
+    color: #c92a2a;
+    border-left: 4px solid #fa5252;
+}
+
+/* Анимация появления */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Анимация закрытия */
+.alert.hide {
+    transform: translateX(100%);
+    opacity: 0;
+}

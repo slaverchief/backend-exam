@@ -16,7 +16,7 @@
             {% if request.user.is_superuser %}
             <a href="{% url 'create_user' %}" class="login-btn">Зарегистрировать</a>
             {% endif %}
-            <span class="user-name">{{ request.full_name }}</span>
+            <span class="user-name">{{ request.user.username }}</span>
             <a href="{% url 'logout' %}" class="login-btn">Выйти</a>
             {% else %}
             <a href="{% url 'signin' %}" class="login-btn">Войти</a>

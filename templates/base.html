@@ -12,12 +12,15 @@
     <nav class="navbar">
         <div class="user-auth">
             {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser %}
+            <a href="{% url 'create_user' %}" class="login-btn">Зарегистрировать</a>
+            {% endif %}
             <span class="user-name">{{ request.user.username }}</span>
             <a href="{% url 'logout' %}" class="login-btn">Выйти</a>
             <a href="{% url 'user_reviews' %}" class="nav">Мои рецензии</a>
             {% else %}
             <a href="{% url 'signin' %}" class="login-btn">Войти</a>
-            <a href="{% url 'create_user' %}" class="login-btn">Зарегистрироваться</a>
+
             {% endif %}
         </div>
         <a href="{% url 'mainpage' %}" class="nav">Главная</a>

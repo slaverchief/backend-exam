@@ -8,10 +8,11 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.contrib.auth import logout as lg
 
-
+# Функция, проверяющая, является ли пользователь суперпользователем
 def is_superuser(user):
     return user.is_superuser
 
+# View для регистрации
 @method_decorator(user_passes_test(is_superuser), name='dispatch')
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
@@ -34,7 +35,7 @@ class SignUpView(CreateView):
 
 
 
-
+# View для входа
 class CustomLoginView(LoginView):
     template_name = 'authsys/signin.html'
 

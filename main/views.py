@@ -15,14 +15,14 @@ def is_superuser(request):
         return False
     return True
 
-
+# View для страницы списка книг
 class BookListView(ListView):
     ListView.template_name = "main/listpage.html"
     ListView.model = Book
     ListView.context_object_name = "books"
     ListView.paginate_by = 10
 
-
+# View для страницы конкретной книги
 class BookDetailView(DetailView):
     model = Book
     template_name = 'main/book_detail.html'
@@ -48,7 +48,7 @@ class BookDetailView(DetailView):
         })
         return context
 
-
+# View для добавление рецензии
 class AddReviewView(LoginRequiredMixin, CreateView):
     model = Review
     fields = ['rate', 'text']
@@ -64,6 +64,7 @@ class AddReviewView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('detail', kwargs={'pk': self.kwargs['pk']})
 
+# View для создания книги
 class BookCreateView(CreateView):
     model = Book
     form_class = BookCreateForm
@@ -88,7 +89,7 @@ class BookCreateView(CreateView):
         context['title'] = 'Добавить книгу'
         return context
 
-
+# View для страницы редактирования книги
 class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Book
     form_class = BookEditForm
@@ -105,7 +106,7 @@ class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context['title'] = f'Редактирование {self.object.name}'
         return context
 
-
+# View для удаления книги
 class DeletionView(View):
 
     def dispatch(self, request, *args, **kwargs):

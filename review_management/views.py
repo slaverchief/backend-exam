@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from main.models import STATUSES
 
-
+# Страница для списка рецензий пользователя
 class UserReviewsListView(LoginRequiredMixin, ListView):
     model = Review
     template_name = 'review_management/user_reviews.html'
@@ -23,7 +23,7 @@ class UserReviewsListView(LoginRequiredMixin, ListView):
         context['title'] = 'Мои рецензии'
         return context
 
-
+# Страница для списка рецензий пользователя со стороны модератора
 class ReviewModerationListView(UserPassesTestMixin, ListView):
     model = Review
     template_name = 'review_management/moder_reviews.html'
@@ -43,7 +43,7 @@ class ReviewModerationListView(UserPassesTestMixin, ListView):
         context['title'] = 'Модерация рецензий'
         return context
 
-
+# Страница для обработки рецензии
 class ReviewModerationView(View):
     template_name = 'review_management/moder_reviews_detail.html'
 

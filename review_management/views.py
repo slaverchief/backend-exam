@@ -30,6 +30,7 @@ class ReviewModerationListView(UserPassesTestMixin, ListView):
     context_object_name = 'reviews'
     paginate_by = 10
 
+    # Этот метод, прежде чем пропустить его через view, проверяет, является ли пользователь по крайней мере модераторомуб
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
 

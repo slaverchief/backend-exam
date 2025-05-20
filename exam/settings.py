@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# Секретный ключ: вообще должен быть известен только владельцу, нужен для шифрования паролей
 SECRET_KEY = 'django-insecure-tv*7^7e&v!_g23j#z_%a55s*l%glwzxc&**24b&^p*a!-t$tjf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+# Миддлвейры для всего приложения: определяют, что будет происходит до и после вызова view
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

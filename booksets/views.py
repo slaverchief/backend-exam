@@ -7,6 +7,7 @@ from .models import BookSet
 from django.db import models
 from main.models import Book
 
+# View для создания подборки
 class CreateBookSetView(View):
     def post(self, request):
         if not request.user.is_authenticated:
@@ -25,7 +26,7 @@ class CreateBookSetView(View):
 
         return redirect('mainpage')
 
-
+# View для просмотра страницы списка подборок
 class UserBooksetsView(View):
     template_name = 'booksets/user_booksets.html'
 
@@ -42,7 +43,7 @@ class UserBooksetsView(View):
         }
         return render(request, self.template_name, context)
 
-
+# View для просмотра конкретной подборки
 class BooksetDetailView(View):
     template_name = 'booksets/bookset_detail.html'
 
@@ -56,7 +57,7 @@ class BooksetDetailView(View):
         }
         return render(request, self.template_name, context)
 
-
+# View для добавления книги в подборку
 class AddBookToBooksetView(View):
     def post(self, request, pk):
         if request.user.is_staff or request.user.is_superuser:

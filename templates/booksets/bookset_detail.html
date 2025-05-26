@@ -17,7 +17,7 @@
         <div class="book-card">
             <div class="book-cover">
                 {% if book.cover %}
-                <img src="{{ book.cover.url }}" alt="{{ book.title }}">
+                <img src="{{ book.cover.file.url }}" alt="{{ book.title }}">
                 {% else %}
                 <div class="no-cover">Нет обложки</div>
                 {% endif %}

@@ -45,6 +45,7 @@ class BookDetailView(DetailView):
         context.update({
             'reviews': reviews,
             'user_review': user_review,
+            "user_booksets": self.request.user.booksets.all()
         })
         return context
 

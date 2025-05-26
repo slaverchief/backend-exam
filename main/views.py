@@ -45,8 +45,10 @@ class BookDetailView(DetailView):
         context.update({
             'reviews': reviews,
             'user_review': user_review,
-            "user_booksets": self.request.user.booksets.all()
+
         })
+        if self.request.user.is_authenticated:
+            context["user_booksets"] = self.request.user.booksets.all()
         return context
 
 # View для добавление рецензии

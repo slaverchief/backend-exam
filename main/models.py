@@ -31,7 +31,7 @@ class Book(models.Model):
             common += review.rate
         if amount == 0:
             return None
-        return common/amount
+        return round(common/amount,2)
 
 class Genre(models.Model):
     name = models.CharField(max_length=255, unique=True)

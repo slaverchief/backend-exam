@@ -3,6 +3,7 @@
 {% block title %}{{ book.name }}{% endblock %}
 {% block header_loading %}
 <link rel="stylesheet" href="{% static 'css/main/detail.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 {% endblock %}
 {% block content %}
 <div class="book-detail-container">
@@ -71,10 +72,39 @@
                 </div>
                 <div class="form-group">
                     <label for="id_text">Текст рецензии:</label>
-                    <textarea name="text" id="id_text" rows="5" class="form-control"></textarea>
+                   <div class="container">
+        <h1>Markdown редактор</h1>
+
+        <div class="instructions">
+            <h3>Основы Markdown:</h3>
+            <ul>
+                <li><strong>Заголовки:</strong> # H1, ## H2, ### H3</li>
+                <li><strong>Курсив:</strong> *текст* или _текст_</li>
+                <li><strong>Жирный:</strong> **текст** или __текст__</li>
+                <li><strong>Списки:</strong> - или * для ненумерованных, 1. для нумерованных</li>
+                <li><strong>Ссылки:</strong> [текст](URL)</li>
+                <li><strong>Изображения:</strong> ![alt текст](URL изображения)</li>
+                <li><strong>Код:</strong> `код` для inline, ``` для блоков кода</li>
+            </ul>
+        </div>
+
+        <div class="editor-container">
+            <div class="panel">
+                <label for="markdown-input">Редактор Markdown:</label>
+                <textarea name="text" id="markdown-input" placeholder="Введите текст с Markdown-разметкой здесь..."></textarea>
+            </div>
+
+            <div class="panel">
+                <label>Предпросмотр:</label>
+                <div id="preview" class="preview"></div>
+            </div>
+        </div>
+    </div>
+
+
                 </div>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i> Отправить
+                    <i class="fas fa-paper-plane">Отправить</i>
                 </button>
             </form>
         </div>
@@ -99,9 +129,7 @@
                         <span>{{ review.date|date:"d.m.Y H:i" }}</span>
                     </div>
                 </div>
-                <div class="review-text">
-                    <p>{{ review.text }}</p>
-                </div>
+                <div class="review-text md-content">{{ review.text }}</div>
             </div>
             {% empty %}
             <div class="no-reviews">
@@ -132,4 +160,40 @@
         {% endif %}
     </div>
 </div>
+   <script>
+        const textarea = document.getElementById('markdown-input');
+        const preview = document.getElementById('preview');
+
+        // Функция для обновления предпросмотра
+        function updatePreview() {
+            const markdownText = textarea.value;
+            preview.innerHTML = marked.parse(markdownText);
+        }
+
+        // Обновляем предпросмотр при загрузке
+        updatePreview();
+
+        // Обновляем предпросмотр при изменении текста
+        textarea.addEventListener('input', updatePreview);
+
+        // Настройки marked.js (опционально)
+        marked.setOptions({
+            breaks: true,
+            gfm: true
+        });
+    </script>
+<script>
+  // Ждём загрузки страницы
+  document.addEventListener('DOMContentLoaded', function() {
+    // Находим все элементы с классом md-content
+    const markdownElements = document.querySelectorAll('.md-content');
+
+    // Преобразуем Markdown в HTML для каждого элемента
+    markdownElements.forEach(element => {
+    console.log(element.textContent)
+      element.innerHTML = marked.parse(element.textContent);
+    });
+  });
+</script>
+
 {% endblock %}

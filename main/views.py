@@ -53,13 +53,15 @@ class AddReviewView(LoginRequiredMixin, CreateView):
     model = Review
     fields = ['rate', 'text']
 
-
     def form_valid(self, form):
         book = get_object_or_404(Book, pk=self.kwargs['pk'])
         form.instance.book = book
         form.instance.user = self.request.user
+        print(form.cleaned_data)
+        form.cleaned_data['text'] = form.cleaned_data['text'].strip()
         messages.success(self.request, 'Ваша рецензия добавлена!')
         return super().form_valid(form)
+
 
     def get_success_url(self):
         return reverse_lazy('detail', kwargs={'pk': self.kwargs['pk']})

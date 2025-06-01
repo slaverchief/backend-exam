@@ -2,6 +2,8 @@
 {% load static %}
 {% block header_loading %}
 <link rel="stylesheet" href="{% static 'css/review_management/detail.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 {% endblock %}
 {% block title %}Модерация рецензии{%  endblock %}
 {% block content %}
@@ -14,11 +16,8 @@
         <p>Оценка: {{ review.rate }}/5</p>
         <p>Дата: {{ review.date }}</p>
         <p>Текущий статус: {{ review.get_status_display }}</p>
-        
-        <div class="review-text">
-            <h3>Текст рецензии:</h3>
-            <p>{{ review.text }}</p>
-        </div>
+        <h3>Текст рецензии:</h3>
+        <div class="review-text">{{ review.text }}</div>
     </div>
     
     <form method="post" class="moderation-actions">
@@ -27,4 +26,17 @@
         <button type="submit" name="action" value="reject" class="btn-reject">Отклонить</button>
     </form>
 </div>
+<script>
+  // Ждём загрузки страницы
+  document.addEventListener('DOMContentLoaded', function() {
+    // Находим все элементы с классом md-content
+    const markdownElements = document.querySelectorAll('.review-text');
+
+    // Преобразуем Markdown в HTML для каждого элемента
+    markdownElements.forEach(element => {
+    console.log(element.textContent)
+      element.innerHTML = marked.parse(element.textContent);
+    });
+  });
+</script>
 {% endblock %}

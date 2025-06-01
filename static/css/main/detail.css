@@ -273,3 +273,66 @@
         gap: 8px;
     }
 }
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.editor-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+@media (max-width: 768px) {
+    .editor-container {
+        flex-direction: column;
+    }
+}
+.panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+textarea {
+    width: 100%;
+    height: 400px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    font-family: monospace;
+    font-size: 14px;
+}
+.preview {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    overflow-y: auto;
+    height: 400px;
+}
+h1, h2 {
+    color: #333;
+}
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+.instructions {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+}
+.instructions h3 {
+    margin-top: 0;
+}
+.instructions ul {
+    padding-left: 20px;
+}
